@@ -12,6 +12,41 @@ def largest_indices(ary, n):
     indices = indices[np.argsort(-flat[indices])]
     return np.unravel_index(indices, ary.shape)
 
+def hr_ndcg(indices_sort_top,index_end_i,top_k): 
+    hr_topK=0
+    ndcg_topK=0
+
+    ndcg_max=[0]*top_k
+    temp_max_ndcg=0
+    for i_topK in range(top_k):
+        temp_max_ndcg+=1.0/math.log(i_topK+2)
+        ndcg_max[i_topK]=temp_max_ndcg
+
+    max_hr=top_k
+    max_ndcg=ndcg_max[top_k-1]
+    if index_end_i<top_k:
+        max_hr=(index_end_i)*1.0
+        max_ndcg=ndcg_max[index_end_i-1] 
+    count=0
+    for item_id in indices_sort_top:
+        if item_id < index_end_i:
+            hr_topK+=1.0
+            ndcg_topK+=1.0/math.log(count+2) 
+        count+=1
+        if count==top_k:
+            break
+
+    if max_hr == 0:
+      hr_t = 0
+    else:
+      hr_t=hr_topK/index_end_i
+      pre_t = hr_topK/top_k
+    
+    ndcg_t=ndcg_topK/max_ndcg  
+    # hr_t,ndcg_t,index_end_i,indices_sort_top
+    # pdb.set_trace() 
+    return hr_t,pre_t,ndcg_t
+
 
 def metrics_loss(model, test_val_loader_loss, batch_size): 
     start_time = time.time() 
@@ -37,38 +72,6 @@ def metrics_loss(model, test_val_loader_loss, batch_size):
     # print(test_val_loss1,test_val_loss)
     return test_val_loss
 
-def hr_ndcg(indices_sort_top,index_end_i,top_k): 
-    hr_topK=0
-    ndcg_topK=0
-
-    ndcg_max=[0]*top_k
-    temp_max_ndcg=0
-    for i_topK in range(top_k):
-        temp_max_ndcg+=1.0/math.log(i_topK+2)
-        ndcg_max[i_topK]=temp_max_ndcg
-
-    max_hr=top_k
-    max_ndcg=ndcg_max[top_k-1]
-    if index_end_i<top_k:
-        max_hr=(index_end_i)*1.0
-        max_ndcg=ndcg_max[index_end_i-1] 
-    count=0
-    for item_id in indices_sort_top:
-        if item_id < index_end_i:
-            hr_topK+=1.0
-            ndcg_topK+=1.0/math.log(count+2) 
-        count+=1
-        if count==top_k:
-            break
-            
-    if max_hr == 0:
-      hr_t = 0
-    else:
-      hr_t=hr_topK/max_hr
-    ndcg_t=ndcg_topK/max_ndcg  
-    # hr_t,ndcg_t,index_end_i,indices_sort_top
-    # pdb.set_trace() 
-    return hr_t,ndcg_t
 
 def metrics(model, test_val_loader, top_k, num_negative_test_val, batch_size):
     HR, NDCG = [], [] 
@@ -108,4 +111,14 @@ def metrics(model, test_val_loader, top_k, num_negative_test_val, batch_size):
     test_loss=round(np.mean(test_loss_sum[:-1]),4)  
  
     return test_loss,round(np.mean(HR),4) , round(np.mean(NDCG),4) 
+
+
+# export ALL_PROXY=http://www-proxy.waseda.jp:8080/
+# export http_proxy=$ALL_PROXY
+# export https_proxy=$ALL_PROXY
+
+# ./configure --prefix=${HOMW}/.local
+# make
+# make install
+
 
