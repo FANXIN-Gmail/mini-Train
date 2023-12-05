@@ -10,9 +10,13 @@ Abstract—With the explosive growth of data on the Internet, recommender system
 <br><br><br>
 
 ## Requirements
-numpy <br><br><br>
-pytorch <br><br><br>
-
+torch==1.4.0 <br>
+pandas==0.24.2 <br>
+scipy==1.3.0 <br>
+numpy==1.22.0 <br>
+tensorboardX==1.8 <br>
+scikit-learn==0.23.2 <br>
+tqdm==4.48.2 <br>
 
 # How to start
 Run the "train_sample.py" to train the model. <br>
