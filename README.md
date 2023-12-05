@@ -22,4 +22,3 @@ tqdm==4.48.2 <br>
 Run the "train_sample.py" to train the model. <br>
 Run the "test_sample.py" to evaluate the model. <br>
 
-# MIT LICENSE
