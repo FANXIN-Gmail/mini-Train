@@ -15,7 +15,7 @@ pytorch <br><br><br>
 
 
 # How to start
-Run the "train_sample.py" to train the model.
-Run the "test_sample.py" to evaluate the model.
+Run the "train_sample.py" to train the model. <br>
+Run the "test_sample.py" to evaluate the model. <br>
 
 # MIT LICENSE
