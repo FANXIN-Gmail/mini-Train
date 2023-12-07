@@ -20,7 +20,13 @@ tqdm==4.48.2 <br>
 
 # How to start
 
+Specifiy some global constants defined in Constant.py before runing this model. <br>
 
+"dataset" : The name of the dataset used
+"user_num" : The number of users
+"item_num" : The number of items
+"dataset_base_path" : The path where the dataset is
+"path_save_model_base" : The path where the model will be saved
 
 Run the "train_sample.py" to train the model. <br>
 Run the "test_sample.py" to evaluate the model. <br>
