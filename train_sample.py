@@ -40,7 +40,7 @@ from shutil import copyfile
 
 from evaluate import *
 from data_utils import *
-from Constant.py import *
+from Constant import *
 
 epoch_num=100
 

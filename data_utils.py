@@ -16,17 +16,7 @@ import json
 
 import torch.nn.functional as F
 
-# Gowalla
-user_num=46490
-item_num=57445
-
-# Yelp
-# user_num=9923
-# item_num=18909
-
-# Amazon
-# user_num=10015
-# item_num=12603
+from Constant import *
 
 # Random sample from list
 def random_sample(All, rate):
@@ -272,7 +262,7 @@ class BPR(nn.Module):
         l2_regulization = 0.0001*(user**2+item_i**2+item_j**2).sum(dim=-1)
         # l2_regulization = 0.01*((gcn1_users_embedding**2).sum(dim=-1).mean()+(gcn1_items_embedding**2).sum(dim=-1).mean())
 
-        loss_ = -((prediction_i - prediction_j).sigmoid().log().mean()) + loss_self
+        loss_ = -((prediction_i - prediction_j).sigmoid().log().mean())
         # loss= loss2 + l2_regulization
         loss = -((prediction_i - prediction_j)).sigmoid().log().mean() + l2_regulization.mean()
         # pdb.set_trace()

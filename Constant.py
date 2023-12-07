@@ -1,3 +1,6 @@
+dataset='Gowalla'
+RUN_ID = "X"
+
 # Gowalla
 user_num=46490
 item_num=57445
@@ -11,7 +14,4 @@ item_num=57445
 # item_num=12603
 
 dataset_base_path='/data/fan_xin/Gowalla'
-path_save_model_base='/data/fan_xin/newlossModel_mini/'+dataset+'/s'+run_id
-
-RUN_ID = "s1"
-dataset='Gowalla'
+path_save_model_base='/data/fan_xin/newlossModel_mini/'+dataset+'/s'+RUN_ID
