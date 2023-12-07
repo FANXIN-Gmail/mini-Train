@@ -28,35 +28,6 @@ item_num=57445
 # user_num=10015
 # item_num=12603
 
-# Distillation
-def loss_self(base, block, user_num, item_num):
-
-    U,I = list_to_set(base)
-    U_,I_ = list_to_set(block)
-
-    n_u = list()
-    n_i = list()
-
-    for i in range(user_num):
-      if len(U_[i]) == 0:
-        n_u.append(0)
-      else:
-        n_u.append( len(U[i]) / len(U_[i]) )
-
-    for i in range(item_num):
-      if len(I_[i]) == 0:
-        n_i.append(0)
-      else:
-        n_i.append( len(I[i]) / len(I_[i]) )
-
-    n_U = torch.norm(torch.tensor(n_u), p=2).item()
-    n_I = torch.norm(torch.tensor(n_i), p=2).item()
-
-    n_U = sum([i/n_U for i in n_u])/user_num
-    n_I = sum([i/n_I for i in n_i])/item_num
-
-    return n_U,n_I
-
 # Random sample from list
 def random_sample(All, rate):
 
@@ -274,7 +245,7 @@ class BPR(nn.Module):
 
         # old_U=0, old_I=0, n_U=0, n_I=0
 
-    def forward(self, user, item_i, item_j, old_U=0, old_I=0, n_U=0, n_I=0):
+    def forward(self, user, item_i, item_j):
 
         users_embedding=self.embed_user.weight
         items_embedding=self.embed_item.weight
@@ -301,13 +272,9 @@ class BPR(nn.Module):
         l2_regulization = 0.0001*(user**2+item_i**2+item_j**2).sum(dim=-1)
         # l2_regulization = 0.01*((gcn1_users_embedding**2).sum(dim=-1).mean()+(gcn1_items_embedding**2).sum(dim=-1).mean())
 
-        U = torch.norm((users_embedding - old_U).abs(), p=2)
-        I = torch.norm((items_embedding - old_I).abs(), p=2)
-        loss_self = n_U*U + n_I*I
-
         loss_ = -((prediction_i - prediction_j).sigmoid().log().mean()) + loss_self
         # loss= loss2 + l2_regulization
-        loss = -((prediction_i - prediction_j)).sigmoid().log().mean() + l2_regulization.mean() + loss_self
+        loss = -((prediction_i - prediction_j)).sigmoid().log().mean() + l2_regulization.mean()
         # pdb.set_trace()
         return prediction_i, prediction_j, loss, loss_
 
